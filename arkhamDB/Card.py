@@ -1,6 +1,7 @@
 import json
 import urllib.request
 import hashlib
+import arkhamDB.CardCache
 
 class Cards:
 
@@ -65,7 +66,20 @@ class Card:
             code = 9999 + int(code[0:-1])
         return code
 
+    def getQuantity(self):
+        return int(self.jsonData["quantity"])
+
+    def isDuplicationCard(self):
+        if "duplicate_of" in self.jsonData.keys():
+            return True
+        return False
+
     def syncOnline(self):
-        req = urllib.request.Request("https://arkhamdb.com/api/public/card/" + self.jsonData["code"])
-        resp = urllib.request.urlopen(req).read()
-        self.data = json.loads(resp.decode('utf-8'))
+        url = "https://arkhamdb.com/api/public/card/" + self.jsonData["code"]
+        self.data = arkhamDB.CardCache.cache.getCard(url)
+        if self.data is None:
+            req = urllib.request.Request(url)
+            resp = urllib.request.urlopen(req).read()
+            self.data = json.loads(resp.decode('utf-8'))
+            arkhamDB.CardCache.cache.addCard(url, self.data)
+
