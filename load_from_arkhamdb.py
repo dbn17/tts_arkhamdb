@@ -11,24 +11,50 @@ env = Environment(
     loader=PackageLoader("arkhamDB"),
     autoescape=select_autoescape()
 )
-class Deck:
+class TTSObject(object):
 
     def __init__(self):
+        h = hashlib.new("sha256")
+        h.update(str(id(self)).encode("utf-8"))
+        d = h.hexdigest()
+        self.GUID = d[0:6]
+
+    def getGUID(self):
+        return self.GUID
+
+class Deck(TTSObject):
+
+    def __init__(self, game):
+        TTSObject.__init__(self)
+        self.game = game
         self.cards = []
 
     def addCard(self, card):
         self.cards. append(card)
 
-class Card:
+    def render(self):
+        template = self.game.env.get_template("tts_deck.json.j2")
+        return template.render(this = self)
+
+class Bag(TTSObject):
+
+    def __init__(self, game):
+        TTSObject.__init__(self)
+        self.game = game
+        self.objects = []
+
+    def addObject(self, obj):
+        self.objects.append(obj)
+
+    def render(self):
+        template = self.game.env.get_template("tts_bag.json.j2")
+        return template.render(this = self)
+
+class Card(TTSObject):
 
     def __init__(self, data):
+        TTSObject.__init__(self)
         self.data = data
-
-    def getGUID(self):
-        h = hashlib.new("sha256")
-        h.update( (self.data["code"] + "_" + self.data["name"]).encode("utf-8"))
-        d = h.hexdigest()
-        return d[0:6]
 
     def getCode(self):
         return self.data["code"]
@@ -44,8 +70,8 @@ class Card:
         return "https://arkhamdb.com" + self.data["backimagesrc"]
 
 
-def loadDeck(cycles, code, encounter=False):
-    deck = Deck()
+def loadDeck(game, cycles, code, encounter=False):
+    deck = Deck(game)
     for pack in cycles.getByCode(code).packs:
         cards = pack.cards.allCards()
         if encounter:
@@ -59,8 +85,25 @@ def loadDeck(cycles, code, encounter=False):
                 continue
             for i in range(card.getQuantity()):
                 deck.addCard(card)
+
             print(f"Processing: {card.getName()}")
     return deck
+
+class Game:
+
+    def __init__(self):
+        self.objects = []
+        self.env = Environment(
+            loader=PackageLoader("arkhamDB"),
+            autoescape=select_autoescape()
+        )
+
+    def addObject(self, obj):
+        self.objects.append(obj)
+
+    def render(self):
+        template = self.env.get_template("tts_savegame.json.j2")
+        return template.render(this = self)
 
 if __name__ == '__main__':
 
@@ -84,20 +127,27 @@ if __name__ == '__main__':
     #machete.syncOnline()
     #agenda.syncOnline()
 
-    env = Environment(
-        loader=PackageLoader("arkhamDB"),
-        autoescape=select_autoescape()
-    )
 
 
-    encounterDeck = Deck()
+    game = Game()
+    topBag = Bag(game)
 
-    coreDeck = loadDeck(cycles, "core")
-    coreEncounterDeck = loadDeck(cycles, "core", encounter=True)
-    tfaDeck = loadDeck(cycles, "tfa")
-    tfaEncounterDeck = loadDeck(cycles, "tfa", encounter=True)
-    dwlDeck = loadDeck(cycles, "dwl")
-    dwlEncounterDeck = loadDeck(cycles, "dwl", encounter=True)
+    encounterDeck = Deck(game)
+
+    coreDeck = loadDeck(game, cycles, "core")
+    coreEncounterDeck = loadDeck(game, cycles, "core", encounter=True)
+    tfaDeck = loadDeck(game, cycles, "tfa")
+    tfaEncounterDeck = loadDeck(game, cycles, "tfa", encounter=True)
+    dwlDeck = loadDeck(game, cycles, "dwl")
+    dwlEncounterDeck = loadDeck(game, cycles, "dwl", encounter=True)
+    # Has problems, missing images etc.
+    #eoeDeck = loadDeck(cycles, "eoe")
+    #eoeEncounterDeck = loadDeck(cycles, "eoe", encounter=True)
+    #investigatorDeck = loadDeck(cycles, "investigator")
+    ptcDeck = loadDeck(game, cycles, "ptc")
+    ptcEncounterDeck = loadDeck(game, cycles, "ptc", encounter=True)
+    ticDeck = loadDeck(game, cycles, "tic")
+    ticEncounterDeck = loadDeck(game, cycles, "tic", encounter=True)
 
     #i = 0
     #for card in cycles.getByCode("core").packs[0].encounterCards.allCards():
@@ -113,9 +163,14 @@ if __name__ == '__main__':
     #deck.addCard(machete)
     #deck.addCard(agenda)
 
-    template = env.get_template("arkhamdb_loader.json.j2")
+
     f = open("new_table.json", "w")
-    f.write(template.render(decks = [coreDeck, coreEncounterDeck, tfaDeck, tfaEncounterDeck, dwlDeck, dwlEncounterDeck]))
+    for deck in [coreDeck, coreEncounterDeck, tfaDeck, tfaEncounterDeck,
+                                     dwlDeck, dwlEncounterDeck, ptcDeck, ptcEncounterDeck,
+                                     ticDeck, ticEncounterDeck]:
+        topBag.addObject(deck)
+    game.addObject(topBag)
+    f.write(game.render())
     f.close()
 
     arkhamDB.CardCache.cache.save("arkhamDBCache.json")

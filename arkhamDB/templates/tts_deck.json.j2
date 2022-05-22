@@ -1,0 +1,116 @@
+{
+  "GUID": "{{ this.getGUID() }}",
+  "Name": "Deck",
+  "Transform": {
+    "posX": -15.08598,
+    "posY": 0.9736069,
+    "posZ": -0.9828411,
+    "rotX": -5.73011348E-05,
+    "rotY": 180.000275,
+    "rotZ": 1.37427878E-05,
+    "scaleX": 0.998981357,
+    "scaleY": 1.0,
+    "scaleZ": 0.998981357
+  },
+  "Nickname": "",
+  "Description": "",
+  "GMNotes": "",
+  "ColorDiffuse": {
+    "r": 0.713235259,
+    "g": 0.713235259,
+    "b": 0.713235259
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": false,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": true,
+  "Hands": false,
+  "SidewaysCard": false,
+  "DeckIDs": [
+{% for card in this.cards %}
+    {{ (loop.index + 401)*100 }}{{ "," if not loop.last }}
+{% endfor %}
+  ],
+  "CustomDeck": {
+{% for card in this.cards %}
+    "{{ loop.index + 401 }}": {
+      "FaceURL": "{{ card.getFaceURL() }}",
+      "BackURL": "{{ card.getBackURL() }}",
+      "NumWidth": 1,
+      "NumHeight": 1,
+      "BackIsHidden": true,
+      "UniqueBack": false,
+      "Type": 0
+    }{{ "," if not loop.last }}
+{% endfor %}
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "ContainedObjects": [
+{% for card in this.cards %}
+    {
+      "GUID": "{{ card.getGUID() }}",
+      "Name": "CardCustom",
+      "Transform": {
+        "posX": 0.639412165,
+        "posY": 0.9735594,
+        "posZ": -8.040691,
+        "rotX": -0.00173255091,
+        "rotY": 180.000259,
+        "rotZ": 0.000717203657,
+        "scaleX": 0.998981357,
+        "scaleY": 1.0,
+        "scaleZ": 0.998981357
+      },
+      "Nickname": {{ card.getName() }},
+      "Description": "{{ card.getCode() }}",
+      "GMNotes": "",
+      "ColorDiffuse": {
+        "r": 0.713235259,
+        "g": 0.713235259,
+        "b": 0.713235259
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": true,
+      "Hands": true,
+      "CardID": {{ (loop.index + 401)*100 }},
+      "SidewaysCard": false,
+      "CustomDeck": {
+        "{{ loop.index + 401 }}": {
+          "FaceURL": "{{ card.getFaceURL() }}",
+          "BackURL": "{{ card.getBackURL() }}",
+          "NumWidth": 1,
+          "NumHeight": 1,
+          "BackIsHidden": true,
+          "UniqueBack": false,
+          "Type": 0
+        }
+      },
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "XmlUI": ""
+    }{{ "," if not loop.last }}
+{% endfor %}
+  ]
+}
