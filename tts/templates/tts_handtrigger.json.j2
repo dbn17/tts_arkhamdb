@@ -1,0 +1,44 @@
+{% for handTrigger in this.getHandTriggers() %}
+{
+      "GUID": "{{ handTrigger.getGUID() }}",
+      "Name": "HandTrigger",
+      "Transform": {
+        "posX": {{ handTrigger.geometry.getPosX() }},
+        "posY": {{ handTrigger.geometry.getPosY() }},
+        "posZ": {{ handTrigger.geometry.getPosZ() }},
+        "rotX": {{ handTrigger.geometry.getRotX() }},
+        "rotY": {{ handTrigger.geometry.getRotY() }},
+        "rotZ": {{ handTrigger.geometry.getRotZ() }},
+        "scaleX": {{ handTrigger.geometry.getScaleX() }},
+        "scaleY": {{ handTrigger.geometry.getScaleY() }},
+        "scaleZ": {{ handTrigger.geometry.getScaleZ() }}
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "ColorDiffuse": {
+        "r": {{ handTrigger.color.getRed()}},
+        "g": {{ handTrigger.color.getRed()}},
+        "b": {{ handTrigger.color.getRed()}},
+        "a": {{ handTrigger.color.getAlpha()}}
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": true,
+      "Grid": false,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "FogColor": "{{ handTrigger.fogColor }}",
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "XmlUI": ""
+}{{ "," if not loop.last }}
+{% endfor %}

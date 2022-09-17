@@ -74,8 +74,9 @@ if __name__ == '__main__':
                 for c in p.allCards():
                     print(c)
 
-    table = tts.Table.CustomTable("mat.jpg")
-    game = tts.Game(table)
+    game = tts.Game()
+    table = tts.Table.CustomTable(game, "mat.jpg")
+    game.setTable(table)
     topBag = tts.Bag(game)
 
     topBag = loadDeckBaggy(game, cycles, ["core", "tfa", "dwl", "ptc", "tic"])
