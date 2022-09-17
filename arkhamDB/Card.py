@@ -60,6 +60,15 @@ class Card:
     def getName(self):
         return json.dumps(self.jsonData["name"])
 
+    def getFaction(self):
+        return self.jsonData["faction_code"]
+
+    def getTypeCode(self):
+        return self.jsonData["type_code"]
+
+    def getEncounterCode(self):
+        return self.jsonData["encounter_code"]
+
     def getCode(self):
         code = self.jsonData["code"]
         if code.endswith("a") or code.endswith("b"):
