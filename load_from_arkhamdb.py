@@ -95,6 +95,27 @@ class Card(TTSObject):
     def getBackURL(self):
         return "https://arkhamdb.com" + self.data["backimagesrc"]
 
+class Board(TTSObject):
+
+    def __init__(self, game, imageURL, scaleX=1.0, scaleY=1.0, scaleZ=1.0):
+        TTSObject.__init__(self)
+        self.game = game
+        self.imageURL = imageURL
+        self.scaleX = scaleX
+        self.scaleY = scaleY
+        self.scaleZ = scaleZ
+
+    def render(self):
+        template = self.game.env.get_template("tts_board.json.j2")
+        return template.render(this = self)
+
+    def getScaleX(self):
+        return self.scaleX
+    def getScaleY(self):
+        return self.scaleY
+    def getScaleZ(self):
+        return self.scaleZ
+
 def loadDeck(game, cycles, code, encounter=False):
     deck = Deck(game)
     for pack in cycles.getByCode(code).packs:
@@ -223,12 +244,14 @@ if __name__ == '__main__':
     #deck.addCard(agenda)
 
 
-    f = open("new_table.json", "w")
+    f = open("savegame.json", "w")
     #for deck in [coreDeck, coreEncounterDeck, tfaDeck, tfaEncounterDeck,
     #                                 dwlDeck, dwlEncounterDeck, ptcDeck, ptcEncounterDeck,
     #                                 ticDeck, ticEncounterDeck]:
     #    topBag.addObject(deck)
     game.addObject(topBag)
+    deckBuildBoard = Board(game, "mat_create_deck.jpg", scaleX=0.5, scaleY=0.5, scaleZ=0.5)
+    game.addObject(deckBuildBoard)
 
     f.write(game.render())
     f.close()
