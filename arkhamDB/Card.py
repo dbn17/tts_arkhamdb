@@ -28,7 +28,7 @@ class Card:
         self.jsonData = jsonData
 
     def __str__(self):
-        print(self.jsonData)
+        #print(self.jsonData)
         if 'name' in self.jsonData.keys():
             return f"{self.jsonData['name']}"
         return f"Duplicate: {self.jsonData['duplicate_of']}"
@@ -39,7 +39,7 @@ class Card:
         else:
             return "https://i.ibb.co/4F8tjt2/0f31cbb43bc30443ab4cc8e9d03ad9fb49272cea-Back-URL.jpg"
     def getBackURL(self):
-        print(self.data)
+        #print(self.data)
         if "backimagesrc" in self.data.keys():
             return "https://arkhamdb.com" + self.data["backimagesrc"]
         if "encounter_code" in self.data:

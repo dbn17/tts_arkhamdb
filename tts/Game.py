@@ -1,21 +1,21 @@
 from jinja2 import Environment, PackageLoader, select_autoescape
 import os.path
-import tts.Lua
+import tts.LuaCollector
 
 class Game:
 
-    def __init__(self, luaGlobPatterns=None):
+    def __init__(self, lua=[]):
         self.objects = []
         self.env = Environment(
             loader=PackageLoader("tts"),
             autoescape=select_autoescape()
         )
         self.table = None
-        self.luaGlobPatterns = luaGlobPatterns
-        if luaGlobPatterns is None:
+        self.luaGlobPatterns = lua
+        if len(lua) == 0:
             ttsPath = os.path.dirname(tts.__file__)
             self.luaGlobPatterns = [os.path.join(ttsPath, "lua", "*.lua")]
-        self.lua = tts.Lua.Lua(self.luaGlobPatterns)
+        self.luaCollector = tts.LuaCollector(self.luaGlobPatterns)
 
     def setTable(self, table):
         self.table = table
@@ -28,4 +28,4 @@ class Game:
         return template.render(this=self)
 
     def getLua(self):
-        return self.lua.getLua()
+        return self.luaCollector.getLua()

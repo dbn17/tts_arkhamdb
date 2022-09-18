@@ -25,7 +25,7 @@ def loadDeck(game, cycles, code, encounter=False):
             for i in range(card.getQuantity()):
                 deck.addCard(card)
 
-            print(f"Processing: {card.getName()}")
+            #print(f"Processing: {card.getName()}")
     return deck
 
 def loadDeckBaggy(game, cycles, codes):
@@ -48,7 +48,7 @@ def loadDeckBaggy(game, cycles, codes):
                     deck = codeBag.getDeckByName(card.getTypeCode())
                 else:
                     if card.getFaction() == "mythos":
-                        print(card.getName())
+                        #print(card.getName())
                         deck = codeBag.getDeckByName(card.getEncounterCode())
                     else:
                         deck = codeBag.getDeckByName(card.getFaction())
@@ -56,7 +56,7 @@ def loadDeckBaggy(game, cycles, codes):
                 for i in range(card.getQuantity()):
                     deck.addCard(card)
 
-                print(f"Processing: {card.getName()}")
+                #print(f"Processing: {card.getName()}")
     return top
 
 
@@ -64,20 +64,19 @@ if __name__ == '__main__':
 
     arkhamDB.CardCache.cache.load("arkhamDBCache.json")
     cycles = arkhamDB.Cycle.Cycles("arkhamdb-json-data")
-    print(cycles)
-    for c in cycles.all():
-        print(c)
-        for p in c.allPacks():
-            print(f"   {p}")
-        if c.getCode() == "core":
-            for p in c.allPacks():
-                for c in p.allCards():
-                    print(c)
+    # print(cycles)
+    # for c in cycles.all():
+    #     print(c)
+    #     for p in c.allPacks():
+    #         print(f"   {p}")
+    #     if c.getCode() == "core":
+    #         for p in c.allPacks():
+    #             for c in p.allCards():
+    #                 print(c)
 
-    game = tts.Game()
+    game = tts.Game(["./arkhamDB/lua/global/*.lua"])
     table = tts.Table.CustomTable(game, "mat.jpg")
     game.setTable(table)
-    topBag = tts.Bag(game)
 
     topBag = loadDeckBaggy(game, cycles, ["core", "tfa", "dwl", "ptc", "tic"])
 
@@ -85,6 +84,19 @@ if __name__ == '__main__':
     game.addObject(topBag)
     deckBuildBoard = tts.Board(game, "mat_create_deck.jpg", scaleX=0.5, scaleY=0.5, scaleZ=0.5)
     game.addObject(deckBuildBoard)
+
+    checker = tts.Checker(game, "SetupButton",
+                          tts.Color(1.0, 0.0, 0.0, 1.0),
+                          tts.Geometry([-7.8, 1.75, 3.4], [0.0, 0.0, 0.0], [1.0, 1.0, 1.0]),
+                          locked=True, lua=["./arkhamDB/lua/setup.lua"])
+
+    checker.setXmlUI(tts.XmlUi.Button(onClick="onSetupCards",
+                                      position=[0.0, 0.0, -30.0],
+                                      width=600,
+                                      height=200,
+                                      fontsize=72,
+                                      text="Set up cards"))
+    game.addObject(checker)
 
     f.write(game.render())
     f.close()

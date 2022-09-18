@@ -1,6 +1,6 @@
 import glob
 
-class Lua:
+class LuaCollector:
 
     def __init__(self, globPatterns):
         self.globPatterns = globPatterns
@@ -15,6 +15,7 @@ class Lua:
                 c = f.read()
                 f.close()
                 c = c.replace("\n", "\\n")
+                c = c.replace('"', '\\"')
                 self.luaString += "\\n" + c
 
     def getLua(self):
