@@ -125,6 +125,7 @@ if __name__ == '__main__':
                                       text="Set up cards"))
 
     game.addLuaGUID("FACTION_DECK_GUID", factionDeck.getGUID())
+    game.addLuaGUID("CREATE_DECK_BOARD_GUID", deckBuildBoard.getGUID())
 
     game.addObject(checker)
     f.write(game.render())
