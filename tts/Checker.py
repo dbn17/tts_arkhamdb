@@ -4,11 +4,10 @@ import tts.TTSObject
 class Checker(tts.TTSObject):
 
     def __init__(self, game, nickName, color, geometry, locked=False, lua=[]):
-        tts.TTSObject.__init__(self)
+        tts.TTSObject.__init__(self, geometry)
         self.game = game
         self.color = color
         self.nickName = nickName
-        self.geometry = geometry
         self.locked = locked
         self.xmlUi = None
         self.luaCollector = tts.LuaCollector(lua)

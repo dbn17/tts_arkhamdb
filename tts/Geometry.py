@@ -6,6 +6,14 @@ class Geometry:
         self.rot = rot
         self.scale = scale
 
+    def translate(self, offset):
+        self.pos[0] += offset[0]
+        self.pos[1] += offset[1]
+        self.pos[2] += offset[2]
+
+    def getPos(self):
+        return self.pos
+
     def getPosX(self):
         return self.pos[0]
 

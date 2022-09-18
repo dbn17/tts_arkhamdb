@@ -16,6 +16,7 @@ class Game:
             ttsPath = os.path.dirname(tts.__file__)
             self.luaGlobPatterns = [os.path.join(ttsPath, "lua", "*.lua")]
         self.luaCollector = tts.LuaCollector(self.luaGlobPatterns)
+        self.luaGuids = []
 
     def setTable(self, table):
         self.table = table
@@ -27,5 +28,13 @@ class Game:
         template = self.env.get_template("tts_savegame.json.j2")
         return template.render(this=self)
 
+    def addLuaGUID(self, varname, val):
+        self.luaGuids.append({"varname": varname, "val" : val})
+
     def getLua(self):
-        return self.luaCollector.getLua()
+        r= ""
+        for g in self.luaGuids:
+            r += "{varname} = \\\"{value}\\\"\\n".format(varname=g["varname"], value=g["val"])
+        r += '\\n'
+        r += self.luaCollector.getLua()
+        return r
