@@ -11,3 +11,4 @@ from tts.Card import Card
 from tts.Table import CustomTable
 from tts.Game import Game
 from tts.Checker import Checker
+from tts.CustomPDF import CustomPDF

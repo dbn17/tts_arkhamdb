@@ -1,3 +1,5 @@
+import os.path
+
 from jinja2 import Environment, PackageLoader, select_autoescape
 
 import arkhamDB.Cycle
@@ -123,6 +125,14 @@ if __name__ == '__main__':
                                       height=200,
                                       fontsize=72,
                                       text="Set up cards"))
+
+    zealotBook = tts.CustomPDF(game,
+                               "file://" + os.path.abspath("assets/night_of_the_zealot.pdf"),
+                               nickName="zealot",
+                               color=tts.Color(1.0, 1.0, 1.0, 0.0),
+                               geometry=tts.Geometry([10.0, 2.0, 10.0], [0.0, 0.0, 0.0], [1.0, 1.0, 1.0]))
+
+    game.addObject(zealotBook)
 
     game.addLuaGUID("FACTION_DECK_GUID", factionDeck.getGUID())
     game.addLuaGUID("CREATE_DECK_BOARD_GUID", deckBuildBoard.getGUID())

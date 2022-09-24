@@ -1,0 +1,52 @@
+{
+  "GUID": "{{ this.getGUID() }}",
+  "Name": "Custom_PDF",
+  "Transform": {
+    "posX": {{ this.geometry.getPosX() }},
+    "posY": {{ this.geometry.getPosY() }},
+    "posZ": {{ this.geometry.getPosZ() }},
+    "rotX": {{ this.geometry.getRotX() }},
+    "rotY": {{ this.geometry.getRotY() }},
+    "rotZ": {{ this.geometry.getRotZ() }},
+    "scaleX": {{ this.geometry.getScaleX() }},
+    "scaleY": {{ this.geometry.getScaleY() }},
+    "scaleZ": {{ this.geometry.getScaleZ() }}
+  },
+  "Nickname": "",
+  "Description": "",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": {{ this.color.getRed() }},
+    "g": {{ this.color.getGreen() }},
+    "b": {{ this.color.getBlue() }},
+    "a": {{ this.color.getAlpha() }}
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": {{ this.getLockJson() }},
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomPDF": {
+    "PDFUrl": "{{ this.getFilename() }}",
+    "PDFPassword": "",
+    "PDFPage": 0,
+    "PDFPageOffset": 0
+  },
+  "LuaScript": "{{ this.getLua() }}",
+  "LuaScriptState": "",
+  "XmlUI": "{{ this.getXmlUi() }}"
+}
